@@ -553,7 +553,7 @@ class Browsershot
 
     protected function getOptionArgs(): array
     {
-        $args = [];
+        $args = ['--font-render-hinting medium'];
 
         if ($this->noSandbox) {
             $args[] = '--no-sandbox';
