@@ -19,6 +19,7 @@ class Browsershot
     protected $includePath = '$PATH:/usr/local/bin';
     protected $binPath = null;
     protected $html = '';
+    protected $chromiumArgs = [];
     protected $noSandbox = false;
     protected $proxyServer = '';
     protected $showBackground = false;
@@ -153,16 +154,6 @@ class Browsershot
         $types[] = compact('selector', 'text', 'delay');
 
         $this->setOption('types', $types);
-
-        return $this;
-    }
-
-    /**
-     * @deprecated This option is no longer supported by modern versions of Puppeteer.
-     */
-    public function setNetworkIdleTimeout(int $networkIdleTimeout)
-    {
-        $this->setOption('networkIdleTimeout');
 
         return $this;
     }
@@ -313,6 +304,13 @@ class Browsershot
             'bottom' => $bottom.$unit,
             'left' => $left.$unit,
         ]);
+    }
+
+    public function addChromiumArg(string $arg)
+    {
+        $this->chromiumArgs[] = $arg;
+
+        return $this;
     }
 
     public function noSandbox()
@@ -553,7 +551,7 @@ class Browsershot
 
     protected function getOptionArgs(): array
     {
-        $args = ['--font-render-hinting=none'];
+        $args = $this->chromiumArgs;
 
         if ($this->noSandbox) {
             $args[] = '--no-sandbox';
